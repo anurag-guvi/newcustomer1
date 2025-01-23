@@ -35,4 +35,5 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 
 #did few changes in the service account like adding roles related to artifact registry
 #Added custom role in Google Cloud IAM that grants the "artifactregistry.repositories.uploadArtifacts" by name Artifact Registry Uploader
+#again it is failing for this error: denied: Unauthenticated request. Unauthenticated requests do not have permission "artifactregistry.repositories.uploadArtifacts" on resource "projects/customerapp-448610/locations/us/repositories/gcr.io" (or it may not exist)
 
