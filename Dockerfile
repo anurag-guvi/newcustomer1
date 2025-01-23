@@ -32,3 +32,6 @@ EXPOSE 8080
 
 # Run the Spring Boot application
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+
+#did few changes in the service account like adding roles related to artifact registry
+
