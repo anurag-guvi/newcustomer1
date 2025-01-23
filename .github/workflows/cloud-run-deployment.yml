@@ -15,22 +15,40 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Google Cloud SDK
+      # Step 2: Set up JDK 17
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Step 3: Cache Gradle dependencies
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-gradle-
+
+      # Step 4: Build the JAR file
+      - name: Build JAR
+        run: ./gradlew clean build --no-daemon -x test
+
+      # Step 5: Set up Google Cloud SDK
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: customerapp-448610
           service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
 
-      # Step 3: Build and Push Docker Image to GCR
+      # Step 6: Build and Push Docker Image to GCR
       - name: Build and Push Docker Image
         run: |
           IMAGE=gcr.io/customerapp-448610/newcustomer1:${{ github.sha }}
           docker build -t $IMAGE .
           docker push $IMAGE
 
-      # Step 4: Deploy to Cloud Run
+      # Step 7: Deploy to Cloud Run
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy newcustomer1 \

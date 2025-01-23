@@ -16,10 +16,11 @@ COPY src ./src
 RUN chmod +x gradlew
 
 # Run Gradle build to create the JAR file
-RUN ./gradlew build --no-daemon -x test
+RUN ./gradlew clean build --no-daemon -x test
 
 # Copy the JAR file from the build stage (you may need to run Gradle build first)
-COPY build/libs/newcustomer1-0.0.1-SNAPSHOT.jar app.jar
+#COPY build/libs/newcustomer1-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/build/libs/newcustomer1-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose port 8080
 EXPOSE 8080
