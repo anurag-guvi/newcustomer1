@@ -34,4 +34,5 @@ EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 
 #did few changes in the service account like adding roles related to artifact registry
+#Added custom role in Google Cloud IAM that grants the "artifactregistry.repositories.uploadArtifacts" by name Artifact Registry Uploader
 
