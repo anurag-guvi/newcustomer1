@@ -30,25 +30,29 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-gradle-
 
-      # Step 4: Build the JAR file
+      # Step 4: Grant execute permission to gradlew
+      - name: Grant execute permission to gradlew
+        run: chmod +x gradlew
+
+      # Step 5: Build the JAR file
       - name: Build JAR
         run: ./gradlew clean build --no-daemon -x test
 
-      # Step 5: Set up Google Cloud SDK
+      # Step 6: Set up Google Cloud SDK
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: customerapp-448610
           service_account_key: ${{ secrets.GCP_SA_KEY }}
 
-      # Step 6: Build and Push Docker Image to GCR
+      # Step 7: Build and Push Docker Image to GCR
       - name: Build and Push Docker Image
         run: |
           IMAGE=gcr.io/customerapp-448610/newcustomer1:${{ github.sha }}
           docker build -t $IMAGE .
           docker push $IMAGE
 
-      # Step 7: Deploy to Cloud Run
+      # Step 8: Deploy to Cloud Run
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy newcustomer1 \
