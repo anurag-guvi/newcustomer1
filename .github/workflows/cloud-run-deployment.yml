@@ -26,7 +26,9 @@ jobs:
       - name: Cache Gradle dependencies
         uses: actions/cache@v3
         with:
-          path: ~/.gradle/caches
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-gradle-
 
@@ -55,9 +57,9 @@ jobs:
       # Step 8: Deploy to Cloud Run
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy newcustomer1 \
-            --image gcr.io/customerapp-448610/newcustomer1:${{ github.sha }} \
-            --region us-central1 \
+          gcloud run deploy newcustomer-git \
+            --image gcr.io/cloudrun-449309/newcustomer_git:${{ github.sha }} \
+            --region asia-south1 \
             --platform managed \
-            --add-cloudsql-instances customerapp-448610:asia-south1:mysqldb \
+            --add-cloudsql-instances cloudrun-449309:asia-south1:mysqldb-instance \
             --allow-unauthenticated
