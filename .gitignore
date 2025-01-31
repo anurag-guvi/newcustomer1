@@ -38,3 +38,6 @@ out/
 
 # Other system files
 .DS_Store
+
+cloudrun-*.json
+cloudrun-449309-fe133d6f277d.json
